@@ -1,57 +1,80 @@
 import React, { useState } from 'react'
-import { render } from 'react-dom';
 
 const App = () => {
 
-  const [countState, setCountState] = useState({
-    count: 0,
-    message: 'Hello'
+  const [calcState, setCalcState] = useState({
+    firstNum: '',
+    secondNum: '',
+    operator: '',
+    result: ''
   })
 
-  countState.handleIncrement= () => {
-    setCountState({ ...countState, count: countState.count + 1 })
+  calcState.handleAddDigit = event => {
+    if (calcState.operator.length === 0) {
+      setCalcState({ ...calcState, firstNum: calcState.firstNum + event.target.value })
+    } else {
+      setCalcState({ ...calcState, secondNum: calcState.secondNum + event.target.value})
+    }
+  }
+  calcState.handleOperator = event => {
+    setCalcState({ ...calcState, operator: event.target.value })
+  }
+  calcState.handleResult = () => {
+    let result = ''
+    let firstNum = parseInt(calcState.firstNum)
+    let secondNum = parseInt(calcState.secondNum)
+
+    switch (calcState.operator) {
+      case '+':
+        result = `${firstNum + secondNum}` 
+        break
+      case '-':
+        result = `${firstNum - secondNum}`
+        break
+      case 'x':
+        result = `${firstNum * secondNum}`
+        break
+      case '/':
+        result = `${firstNum / secondNum}`
+        break
+      default:
+        break
+    }
+
+    setCalcState({ ...calcState, result })
   }
 
-  countState.handleDecrement = () => {
-    setCountState({ ...countState, count: countState.count - 1 })
+  calcState.handleClear = () => {
+    setCalcState({ ...calcState, firstNum: '', secondNum: '', operator: '', result: '' })
   }
 
-  countState.handleReset = () => {
-    setCountState({ ...countState, count: 0 })
-  }
-
-  state = {
-    count: 0,
-  }
-
-  handleBtnClick = event => {
-    const x = parseInt(event.target.value)
-    this.setState({ count: this.state.count + x })
-  }
-
-  handleResetCount = () => {
-    this.setState({ count: 0 })
-  }
-
-  render() {
-    return (
-      <>
-        <h1>{countState.message}</h1>
-        <h1>Count: {countState.count}</h1>
-        <button onClick={countState.handleIncrement}>+</button>
-        <button onClick={countState.handleDecrement}>-</button>
-        <button onClick={countState.handleReset}>RESET</button>
-
-        <h1>Count: {this.state.count}</h1>
-          <button onClick={this.handleBtnClick} value={1}>1</button>
-          <button onClick={this.handleBtnClick} value={2}>2</button>
-          <button onClick={this.handleBtnClick} value={3}>3</button>
-          <button onClick={this.handleBtnClick} value={4}>4</button>
-          <button onClick={this.handleBtnClick} value={5}>5</button>
-          <button onClick={this.handleResetCount}>RESET</button>
-      </>
-    )
-  }
+  return (
+    <>
+      <p>
+        <button value={0} onClick={calcState.handleAddDigit}>0</button>
+        <button value={1} onClick={calcState.handleAddDigit}>1</button>
+        <button value={2} onClick={calcState.handleAddDigit}>2</button>
+        <button value={3} onClick={calcState.handleAddDigit}>3</button>
+        <button value={4} onClick={calcState.handleAddDigit}>4</button>
+        <button value={5} onClick={calcState.handleAddDigit}>5</button>
+        <button value={6} onClick={calcState.handleAddDigit}>6</button>
+        <button value={7} onClick={calcState.handleAddDigit}>7</button>
+        <button value={8} onClick={calcState.handleAddDigit}>8</button>
+        <button value={9} onClick={calcState.handleAddDigit}>9</button>
+      </p>
+      <p>
+        <button value="+" onClick={calcState.handleOperator}>+</button>
+        <button value="-" onClick={calcState.handleOperator}>-</button>
+        <button value="x" onClick={calcState.handleOperator}>x</button>
+        <button value="/" onClick={calcState.handleOperator}>/</button>
+      </p>
+      <p>
+        <button onClick={calcState.handleResult}>=</button>
+        <button onClick={calcState.handleClear}>RESET</button>
+      </p>
+  <h1>{calcState.firstNum} {calcState.operator} {calcState.secondNum} {calcState.result.length > 0 ? `= ${calcState.result}` : ''}</h1>
+    </>
+  )
 }
 
 export default App
